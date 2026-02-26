@@ -7,50 +7,65 @@ const usdToRub = 76.5
 const eurToRub = usdToRub / usdToEur
 
 func main() {
-	countFrom, from, to := input()
+	from := inputCurrency("Введите исходную валюту:")
+	countFrom := inputCount()
+	to := inputCurrency("Введите целевую валюту:")
+
 	countTo := convert(countFrom, from, to)
+
 	fmt.Println("eurToRub = ", eurToRub)
 	fmt.Println(countTo)
 }
-
-func input() (float64, string, string) {
-	count, from, to := 0.0, "usd", "eur"
-	fmt.Println("Введите число:")
-	fmt.Scan(&count)
-	fmt.Println("Введите исходную валюту:")
-	fmt.Scan(&from)
-	fmt.Println("Введите целеву/ валюту:")
-	fmt.Scan(&to)
-	return count, from, to
+func inputCount() float64 {
+	count := 0.0
+	for {
+		fmt.Println("Введите число:")
+		_, err := fmt.Scan(&count)
+		if err == nil {
+			break
+		} else {
+			fmt.Println("Введите корректные данные!")
+		}
+	}
+	return count
+}
+func inputCurrency(text string) string {
+	currency := ""
+	for {
+		fmt.Println(text)
+		_, err := fmt.Scan(&currency)
+		if err == nil && (currency == "rub" || currency == "usd" || currency == "eur") {
+			break
+		} else {
+			fmt.Println("Введите корректные данные!")
+		}
+	}
+	return currency
 }
 
 func convert(amount float64, fromCurrency string, toCurrency string) float64 {
-	if fromCurrency == "rub" {
-		if toCurrency == "eur" {
-			return amount / eurToRub
-		}
-		if toCurrency == "usd" {
-			return amount / usdToRub
-		}
+
+	if fromCurrency == toCurrency {
+		return amount
 	}
 
-	if fromCurrency == "usd" {
-		if toCurrency == "eur" {
-			return amount * usdToEur
-		}
-		if toCurrency == "rub" {
-			return amount * usdToRub
-		}
+	countInUsd := 0.0
+
+	switch fromCurrency {
+	case "rub":
+		countInUsd = amount / usdToRub
+	case "eur":
+		countInUsd = amount / usdToEur
+	default:
+		countInUsd = amount
 	}
 
-	if fromCurrency == "eur" {
-		if toCurrency == "usd" {
-			return amount / usdToEur
-		}
-		if toCurrency == "rub" {
-			return amount * eurToRub
-		}
+	switch toCurrency {
+	case "rub":
+		return countInUsd * usdToRub
+	case "eur":
+		return countInUsd * usdToEur
+	default:
+		return countInUsd
 	}
-
-	return amount
 }
