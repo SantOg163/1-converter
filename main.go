@@ -2,6 +2,12 @@ package main
 
 import "fmt"
 
+var usdTo = map[string]float64{
+	"rub":  76.5,
+	"euro": 0.85,
+	"usd":  1.0,
+}
+
 const usdToEur = 0.85
 const usdToRub = 76.5
 const eurToRub = usdToRub / usdToEur
@@ -49,23 +55,24 @@ func convert(amount float64, fromCurrency string, toCurrency string) float64 {
 		return amount
 	}
 
-	countInUsd := 0.0
+	countInUsd := amount / usdTo[fromCurrency]
 
-	switch fromCurrency {
-	case "rub":
-		countInUsd = amount / usdToRub
-	case "eur":
-		countInUsd = amount / usdToEur
-	default:
-		countInUsd = amount
-	}
+	// switch fromCurrency {
+	// case "rub":
+	// 	countInUsd = amount / usdToRub
+	// case "eur":
+	// 	countInUsd = amount / usdToEur
+	// default:
+	// 	countInUsd = amount
+	// }
 
-	switch toCurrency {
-	case "rub":
-		return countInUsd * usdToRub
-	case "eur":
-		return countInUsd * usdToEur
-	default:
-		return countInUsd
-	}
+	// switch toCurrency {
+	// case "rub":
+	// 	return countInUsd * usdToRub
+	// case "eur":
+	// 	return countInUsd * usdToEur
+	// default:
+	// 	return countInUsd
+	// }
+	return  countInUsd * usdTo[toCurrency]
 }
