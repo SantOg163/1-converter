@@ -17,7 +17,7 @@ func main() {
 	countFrom := inputCount()
 	to := inputCurrency("Введите целевую валюту:")
 
-	countTo := convert(countFrom, from, to)
+	countTo := convert(countFrom, from, to, &usdTo)
 
 	fmt.Println("eurToRub = ", eurToRub)
 	fmt.Println(countTo)
@@ -49,13 +49,13 @@ func inputCurrency(text string) string {
 	return currency
 }
 
-func convert(amount float64, fromCurrency string, toCurrency string) float64 {
+func convert(amount float64, fromCurrency string, toCurrency string, pointerUsdTo *map[string]float64) float64 {
 
 	if fromCurrency == toCurrency {
 		return amount
 	}
 
-	countInUsd := amount / usdTo[fromCurrency]
+	countInUsd := amount / (*pointerUsdTo)[fromCurrency]
 
 	// switch fromCurrency {
 	// case "rub":
@@ -74,5 +74,5 @@ func convert(amount float64, fromCurrency string, toCurrency string) float64 {
 	// default:
 	// 	return countInUsd
 	// }
-	return  countInUsd * usdTo[toCurrency]
+	return countInUsd * (*pointerUsdTo)[toCurrency]
 }
